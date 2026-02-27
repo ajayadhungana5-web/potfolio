@@ -8,7 +8,10 @@
 const PROXY_URL = '/api/chat'; // Using Vercel Function proxy
 const MODEL = 'arcee-ai/trinity-large-preview:free';
 const FALLBACK_MODELS = [
-    'stepfun/step-3.5-flash:free'
+    'stepfun/step-3.5-flash:free',
+    'liquid/lfm-2.5-1.2b-instruct:free',
+    'arcee-ai/trinity-mini:free',
+    'nvidia/nemotron-nano-9b-v2:free'
 ];
 
 const SYSTEM_PROMPT = `
