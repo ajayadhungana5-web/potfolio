@@ -383,6 +383,50 @@ tl.to('#loader-word .char', {
 
 // --- Scroll Animations ---
 
+// About Me Section Animations
+const aboutSection = document.getElementById('about');
+if (aboutSection) {
+    // Photos stack animation
+    gsap.from('.about-photo', {
+        scrollTrigger: {
+            trigger: aboutSection,
+            start: 'top 75%',
+        },
+        y: 100,
+        x: (index) => index * -30,
+        rotate: (index) => (index === 0 ? -5 : 5),
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.2,
+        ease: "back.out(1.2)"
+    });
+
+    // Parallax sub-elements for photo stack
+    gsap.to('.about-photo:nth-child(2)', {
+        scrollTrigger: {
+            trigger: aboutSection,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1
+        },
+        y: -40,
+        rotate: 8
+    });
+
+    // Text reveal stagger
+    gsap.from('.about-reveal', {
+        scrollTrigger: {
+            trigger: aboutSection,
+            start: 'top 80%',
+        },
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out"
+    });
+}
+
 // Expertise Cards Stagger
 gsap.from('.expertise-card', {
     scrollTrigger: {
