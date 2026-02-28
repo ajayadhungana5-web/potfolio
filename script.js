@@ -783,54 +783,49 @@ if (contactForm) {
     });
 }
 
-// --- Horizontal Scroll for Work Section ---
+// --- Vertical Stacking Work Section Animations ---
 if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 
-    const workStrip = document.getElementById('work-strip');
-    const workSection = document.getElementById('work');
-    const workCards = gsap.utils.toArray('.work-card');
-    const progressLabel = document.getElementById('work-progress-label');
-    const workDots = document.querySelectorAll('.work-dot');
+    const workCards = gsap.utils.toArray('.work-stack-card');
 
-    if (workStrip && workSection && workCards.length > 0) {
+    if (workCards.length > 0) {
+        // Apply slight scale down to the cards as they get stacked over
+        workCards.forEach((card, index) => {
+            if (index < workCards.length - 1) {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top top',
+                        endTrigger: workCards[index + 1],
+                        end: 'top top',
+                        scrub: 1,
+                        pinSpacing: false
+                    },
+                    scale: 0.95,
+                    opacity: 0.5,
+                    filter: "blur(4px)",
+                    transformOrigin: "top center",
+                    ease: "none"
+                });
+            }
+        });
 
-        const tween = gsap.to(workStrip, {
-            x: () => -(workStrip.scrollWidth - window.innerWidth),
-            ease: "none",
-            scrollTrigger: {
-                trigger: workSection,
-                start: "top top",
-                end: () => `+=${workStrip.scrollWidth - window.innerWidth}`,
-                pin: true,
-                scrub: 1,
-                invalidateOnRefresh: true,
-                onUpdate: (self) => {
-                    const progress = self.progress;
-                    const totalCards = workCards.length;
-                    let activeIndex = Math.min(
-                        totalCards - 1,
-                        Math.floor(progress * totalCards)
-                    );
-                    if (progress > 0.95) activeIndex = totalCards - 1;
-
-                    if (progressLabel) {
-                        progressLabel.textContent = `0${activeIndex + 1} / 0${totalCards}`;
-                    }
-
-                    if (workDots) {
-                        workDots.forEach((dot, index) => {
-                            if (index === activeIndex) {
-                                dot.style.width = '24px';
-                                dot.style.backgroundColor = '#00ff66';
-                            } else {
-                                dot.style.width = '8px';
-                                dot.style.backgroundColor = 'rgba(255,255,255,0.2)';
-                            }
-                        });
+        // Add extreme parallax to the layered authentic photos inside the cards
+        gsap.utils.toArray('.parallax-img').forEach(img => {
+            gsap.fromTo(img,
+                { y: 100 },
+                {
+                    y: -50,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: img.closest('.work-stack-card'),
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 1
                     }
                 }
-            }
+            );
         });
     }
 }
